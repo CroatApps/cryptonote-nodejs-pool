@@ -195,11 +195,29 @@
     </div>    
 </div>
 
+<!-- Top 10 miners -->
+	<div class="poolChart" style="display: block;">
+		<h4>Top 10 miners</h4>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Miner</th>
+					<th>Hashrate</th>
+				</tr>
+			</thead>
+			<tbody id="top10_rows"></tbody>
+		</table>
+	</div>
+
 <!-- Javascript -->
 <script>
 currentPage = {
     destroy: function(){
         $('#networkLastBlockFound,#poolLastBlockFound').timeago('dispose');
+	if (xhrGetTOP) xhrGetTOP.abort();
     },
     update: function(){
         $('#networkLastBlockFound').timeago('update', new Date(lastStats.network.timestamp * 1000).toISOString());
@@ -308,4 +326,24 @@ $(function(){
         success: createCharts
     });               
 });    
+
+/* Top 10 miners */
+	var xhrGetTOP = $.ajax({
+		url: api + '/get_top10miners',
+		data: {
+			time: $('#top10_rows').children().last().data('time')
+		},
+		dataType: 'json',
+		cache: 'false',
+		success: function(data){
+			render(data);
+		}
+	});
+	function render(data){
+		for (var i=0; i<data.length; ++i) {
+			var r = data[i];
+			var app = '<tr><td>'+(i+1)+'</td>'+'<td>'+r.miner+'</td>'+'<td>'+getReadableHashRateString(r.hashrate)+'/s</td></tr>';
+			$( "#top10_rows" ).append(app);
+		}
+	}
 </script>

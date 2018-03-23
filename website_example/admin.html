@@ -32,7 +32,10 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="list-group">
-                <a data-page="admin/statistics.html" href="#" class="list-group-item hot_link active"> <i class="fa fa-bar-chart-o"></i> Statistics </a> <a data-page="admin/monitoring.html" href="#monitoring" class="hot_link list-group-item"> <i class="fa fa-eye"></i> Monitoring </a> <a data-page="admin/userslist.html" href="#users_list" class=" hot_link list-group-item"> <i class="fa fa-users"></i> Users List </a>
+                <a data-page="admin/statistics.html" href="#" class="list-group-item hot_link active"> <i class="fa fa-bar-chart-o"></i> Statistics </a> 
+				<a data-page="admin/monitoring.html" href="#monitoring" class="hot_link list-group-item"> <i class="fa fa-eye"></i> Monitoring </a> 
+				<a data-page="admin/userslist.html" href="#users_list" class=" hot_link list-group-item"> <i class="fa fa-users"></i> Users List </a>
+				<a data-page="admin/portsinfo.html" href="#portsinfo" class=" hot_link list-group-item"> <i class="fa fa-plug"></i> Ports Info </a>				
             </div>
         </div>
         <div class="col-sm-9 layout">
@@ -222,6 +225,19 @@ function routePage(loadedCallback) {
             }
         }
     });
+}
+
+function updateText(elementId, text){
+    var el = document.getElementById(elementId);
+    if (el.textContent !== text){
+        el.textContent = text;
+    }
+    return el;
+}
+	
+function updateIndex(){
+    updateText('coinName', lastStats.config.coin);
+    updateText('poolVersion', lastStats.config.version);
 }
 </script>
 

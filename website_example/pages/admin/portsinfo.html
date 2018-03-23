@@ -1,0 +1,78 @@
+<style>
+	td {
+		text-align: center
+	}
+</style>
+<!-- Handlebars template -->
+<script id="portsListTable" type="text/x-handlebars-template">
+	{{#each ports}}
+	<tr style="width: 90%">
+		<td data-sort="{{this.port.port}}">{{this.port}}</td>
+		<td data-sort="{{this.port.miners}}">{{this.miners}}</td>
+	</tr>
+	{{/each}}
+</script>
+
+<!-- Ports List -->
+<div class="table-responsive" style="width: 80%;">
+	<table class="table table-hover table-striped portsList">
+		<thead>
+		<tr>
+			<th class="sort" style="text-align: center;">Port <i class="fa fa-sort"></i></th>
+			<th class="sort" style="text-align: center;">Connected users <i class="fa fa-sort"></i></th>
+		</tr>
+		</thead>
+		<tbody id="template">
+		</tbody>
+		<tfoot>
+		<tr>
+			<th style="text-align: center;">Total Users</th>
+			<th style="text-align: center;"><span id="total_miners"></span></td>
+		</tr>
+		</tfoot>
+	</table>
+<br>
+</div>
+
+<!-- Javascript -->
+<script>
+	function parsePorts(ports) {
+		var total_miners = 0;
+		var portsArray = [],
+			properObject = {};
+		for(var port in ports) {
+			if(ports.hasOwnProperty(port)) {
+				var portsData = ports[port];
+				portsArray.push({
+					port: portsData.port,
+					miners: portsData.miners
+				});
+				total_miners = Number(total_miners) + Number(portsData.miners);
+				updateText('total_miners', total_miners);				
+			}
+		}
+
+		properObject['ports'] = portsArray.sort(function(a, b) {
+			return a.port.port - b.port.port
+		}).reverse();
+		return properObject;
+
+	}
+	function createPortsTable() {
+		$.ajax({
+			url: api + '/admin_ports',
+			data: {password: docCookies.getItem('password')},
+			cache: false,
+			dataType: 'json',
+			success: function(data) {
+				renderTemplate(parsePorts(data), '#portsListTable', '#template');
+			}
+		});
+	}
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+		$('.portsList th.sort').on('click', sortTable);
+		createPortsTable();
+	});
+</script>
+

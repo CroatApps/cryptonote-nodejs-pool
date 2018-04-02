@@ -129,7 +129,10 @@ function getReadableHashRateString(hashrate){
         hashrate = hashrate / 1000;
         i++;
     }
-    return hashrate.toFixed(2) + byteUnits[i];
+    
+    if(hashrate>0) { return hashrate.toFixed(2) + byteUnits[i]; }
+	else { return 0 + byteUnits[i]; }
+
 }
     
 function getReadableCoins(coins, digits, withoutSymbol){

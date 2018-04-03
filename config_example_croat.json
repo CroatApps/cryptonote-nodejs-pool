@@ -144,6 +144,10 @@
         "port": 6379,
         "auth": null
     },
+	
+    "userHistory":{
+            "maxWalletHistory": 60
+        },
 
     "email": {
         "enabled": false,

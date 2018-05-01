@@ -3,7 +3,7 @@
     "symbol": "CROAT",
     "coinUnits": 100000000000,
     "coinDifficultyTarget": 60,
-    "moneroVariant": true,
+    "cnVariant": null,
 
     "logging": {
         "files": {
@@ -146,7 +146,8 @@
     },
 	
     "userHistory":{
-            "maxWalletHistory": 60
+            "maxWalletHistory": 60,
+            "maxWorkerHistory": 7
         },
 
     "email": {
@@ -195,6 +196,12 @@
     "charts": {
         "pool": {
             "hashrate": {
+                "enabled": true,
+                "updateInterval": 60,
+                "stepInterval": 1800,
+                "maximumPeriod": 86400
+            },
+            "miners": {
                 "enabled": true,
                 "updateInterval": 60,
                 "stepInterval": 1800,

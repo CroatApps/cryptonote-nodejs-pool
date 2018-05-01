@@ -1,7 +1,7 @@
 cryptonote-nodejs-pool
 ======================
 
-High performance Node.js (with native C addons) mining pool for CryptoNote based coins such as Bytecoin, DuckNote, Monero, QuazarCoin, Boolberry, Dashcoin, GRAFT, etc. Comes with lightweight example front-end script which uses the pool's AJAX API.
+High performance Node.js (with native C addons) mining pool for CryptoNote based coins such as Bytecoin, DuckNote, Monero, QuazarCoin, Boolberry, Dashcoin, GRAFT, SUPERIORCOIN etc. Comes with lightweight example front-end script which uses the pool's AJAX API.
 
 
 
@@ -97,7 +97,7 @@ Community / Support
 #### Pools Using This Software
 
 * https://graft.blockhashmining.com/
-
+* https://graft.anypool.net/
 
 Usage
 ===
@@ -107,11 +107,23 @@ Usage
   * [ByteCoin](https://github.com/amjuarez/bytecoin)
   * [Monero](https://github.com/monero-project/bitmonero)
   * [GRAFT](https://github.com/graft-project/GraftNetwork)
+  * [SUPERIORCOIN](https://github.com/TheSuperiorCoin/TheSuperiorCoin)
 * [Node.js](http://nodejs.org/) v4.0+
-  * For Ubuntu: `sudo apt-get install nodejs npm && ln -s /usr/bin/nodejs /usr/bin/node`
-* [Redis](http://redis.io/) key-value store v2.6+ ([follow these instructions](http://redis.io/topics/quickstart))
+  * For Ubuntu: 
+ ```
+  curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash
+  sudo apt-get install -y nodejs
+```
+* [Redis](http://redis.io/) key-value store v2.6+ 
+  * For Ubuntu: 
+```
+sudo add-apt-repository ppa:chris-lea/redis-server
+sudo apt-get update
+sudo apt-get install redis-server
+ ```
 * libssl required for the node-multi-hashing module
   * For Ubuntu: `sudo apt-get install libssl-dev`
+
 * Boost is required for the cryptonote-util module
   * For Ubuntu: `sudo apt-get install libboost-all-dev`
 
@@ -120,8 +132,7 @@ Usage
 Those are legitimate requirements. If you use old versions of Node.js or Redis that may come with your system package manager then you will have problems. Follow the linked instructions to get the last stable versions.
 
 
-[**Redis security warning**](http://redis.io/topics/security): be sure firewall access to redis - an easy way is to
-include `bind 127.0.0.1` in your `redis.conf` file. Also it's a good idea to learn about and understand software that
+[**Redis warning**](http://redis.io/topics/security): It'sa good idea to learn about and understand software that
 you are using - a good place to start with redis is [data persistence](http://redis.io/topics/persistence).
 
 #### 1) Downloading & Installing
@@ -140,7 +151,7 @@ npm update
 
 *Warning for Cryptonote coins other than Monero:* this software may or may not work with any given cryptonote coin. Be wary of altcoins that change the number of minimum coin units because you will have to reconfigure several config values to account for those changes. Unless you're offering a bounty reward - do not open an issue asking for help getting a coin other than Monero working with this software.
 
-Copy the `config_example.json` file to `config.json` then overview each options and change any to match your preferred setup.
+Copy the `config_examples/COIN.json` file of your choice to `config.json` then overview each options and change any to match your preferred setup.
 
 Explanation for each field:
 ```javascript
@@ -156,8 +167,8 @@ Explanation for each field:
 /* Coin network time to mine one block, see DIFFICULTY_TARGET constant in DAEMON_CODE/src/cryptonote_config.h */
 "coinDifficultyTarget": 120,
 
-/* Enable/Disable support for monero variants */
-"moneroVariant": false,
+/* Set Cryptonight variant. Set 0 for original Cryptonight algorithm and 1 for Cryptonight v1 / Monero v7 algorithm. If empty will use automatic detection. Set -1 to disable. */
+"cnVariant": null,
 
 /* Logging */
 "logging": {
@@ -414,6 +425,12 @@ Explanation for each field:
             "stepInterval": 1800, // Chart step interval calculated as average of all updated values
             "maximumPeriod": 86400 // Chart maximum periods (chart points number = maximumPeriod / stepInterval = 48)
         },
+        "miners": {
+            "enabled": true,
+            "updateInterval": 60,
+            "stepInterval": 1800,
+            "maximumPeriod": 86400
+        },
         "workers": {
             "enabled": true,
             "updateInterval": 60,
@@ -481,6 +498,14 @@ node init.js -module=api
 
 [Example screenshot](http://i.imgur.com/SEgrI3b.png) of running the pool in single module mode with tmux.
 
+To keep your pool up, on operating system with systemd, you can create add your pool software as a service.  
+Use this [example](https://github.com/VirtuBox/cryptonote-nodejs-pool/blob/master/utils/cryptonote-nodejs-pool.service) and create your service file `/lib/systemd/system/cryptonote-nodejs-pool.service`
+Then enable and start the service with the following commands : 
+
+```
+systemctl enable cryptonote-nodejs-pool.service
+systemctl start cryptonote-nodejs-pool.service
+```
 
 #### 4) Host the front-end
 

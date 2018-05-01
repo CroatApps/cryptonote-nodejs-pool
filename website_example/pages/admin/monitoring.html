@@ -92,16 +92,15 @@ function monitoringInfoParse(data) {
         lastFailResponse: data['monitoring'].wallet.lastFailResponse || ' ',
         lastResponse: data['monitoring'].wallet.lastResponse || ' '
     };
+    
     var properData = {};
-	
-        if(data.hasOwnProperty('logs')==true) {
-                properData['logs'] = data['logs'];
-            for(var log in data['logs']) {
-                data['logs'][log].changed = formatDate(data['logs'][log].changed);
-                data['logs'][log].link = api + '/admin_log?file=' + log + '&password=' + docCookies.getItem('password');
-            }
+    if(data.hasOwnProperty('logs')) {
+        properData['logs'] = data['logs'];
+        for(var log in data['logs']) {
+            data['logs'][log].changed = formatDate(data['logs'][log].changed);
+            data['logs'][log].link = api + '/admin_log?file=' + log + '&password=' + docCookies.getItem('password');
         }
-
+    }
     properData['monitoringDaemon'] = monitoringDaemon;
     properData['monitoringWallet'] = monitoringWallet;
 

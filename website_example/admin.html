@@ -142,7 +142,7 @@ function getReadableHashRateString(hashrate){
         hashrate = hashrate / 1000;
         i++;
     }
-    if (hashrate > 0) hashrate = hashrate.toFixed(2);
+    if (hashrate > 0) hashrate = parseFloat(hashrate).toFixed(2);
     return hashrate + byteUnits[i];
 }
     
